@@ -8,7 +8,9 @@ const general = require('../controllers/general');
 // ROUTES
 router.get('/', general.index);
 
-router.get('/other', general.other_get);
+router.get('/register', general.register_get);
+
+router.get('/login', general.login_get);
 
 // EXPORT ROUTER
 module.exports = router;

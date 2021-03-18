@@ -20,7 +20,7 @@ db.on('error', console.error.bind(console, 'Mongo connection error'));
 
 // APP SETUP
 const app = express();
-app.set('views', __dirname);
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // MIDDLEWARE
