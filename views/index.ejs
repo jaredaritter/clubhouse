@@ -16,9 +16,15 @@
     <div class="d-flex justify-content-center">
       <div class="vh-100 d-flex flex-column justify-content-center">
         <div class="d-flex flex-column">
-          <%- include('partials/header') %>
+          <% if (user) { %>
+          <h1>Welcome Back <%= user.username %>!</h1>
+          <a href="/logout">Logout</a>
           <a href="/register">Register</a>
+          <% } else { %>
+          <h1>Welcome!</h1>
           <a href="/login">Login</a>
+          <a href="/register">Register</a>
+          <% } %>
         </div>
       </div>
     </div>
