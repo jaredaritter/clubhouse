@@ -1,8 +1,12 @@
-// IMPORT MODELS
+// ---------------------------------------
+// ** IMPORT MODELS **
+// ---------------------------------------
 const User = require('../models/User');
 const Message = require('../models/Message');
 
-// SELF EXPORTING CONTROLLERS
+// ---------------------------------------
+// ** SELF EXPORTING CONTROLLERS **
+// ---------------------------------------
 exports.index = (req, res, next) => {
   res.render('index');
 };
@@ -21,7 +25,7 @@ exports.register_post = (req, res, next) => {
     if (err) return next(err);
     if (user) {
       console.log(user);
-      res.redirect('/');
+      res.redirect('/login');
     }
   });
 };
