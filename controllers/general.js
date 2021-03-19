@@ -25,11 +25,19 @@ exports.register_post = (req, res, next) => {
     if (err) return next(err);
     if (user) {
       console.log(user);
-      res.redirect('/login');
+      res.redirect('/');
     }
   });
 };
 
 exports.login_get = (req, res, next) => {
   res.render('login');
+};
+
+exports.login_post = (req, res, next) => {
+  res.send('<h1>Logged In</h1>');
+};
+
+exports.error_get = (req, res, next) => {
+  res.render('error');
 };
