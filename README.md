@@ -6,4 +6,5 @@ Use: Register a user name and password. After registering you will be able to si
 
 ## To Do
 
-- Implement bcryptjs functionality to handle passwords securely.
+- [x] Implemented basick error handling in case username already present in the database.
+- [ ] Implement bcryptjs functionality to handle passwords securely.
