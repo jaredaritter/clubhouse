@@ -17,10 +17,13 @@ exports.register_post = (req, res, next) => {
     last_name: req.body.lastname,
     username: req.body.username,
     password: req.body.password,
+  }).save((err, user) => {
+    if (err) return next(err);
+    if (user) {
+      console.log(user);
+      res.redirect('/');
+    }
   });
-  console.log(user);
-
-  res.send('<h1>Success</h1>');
 };
 
 exports.login_get = (req, res, next) => {
