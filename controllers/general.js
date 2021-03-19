@@ -21,11 +21,21 @@ exports.register_post = (req, res, next) => {
     last_name: req.body.lastname,
     username: req.body.username,
     password: req.body.password,
-  }).save((err, user) => {
-    if (err) return next(err);
-    if (user) {
-      console.log(user);
-      res.redirect('/');
+  });
+  User.findOne({ username: user.username }, (err, foundUser) => {
+    if (err) {
+      return next(err);
+    }
+    if (foundUser) {
+      res.redirect('/register');
+    } else {
+      user.save((err, user) => {
+        if (err) return next(err);
+        if (user) {
+          console.log(user);
+          res.redirect('/');
+        }
+      });
     }
   });
 };
