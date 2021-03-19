@@ -2,6 +2,7 @@
 // ** IMPORT MODULES **
 // ---------------------------------------
 const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
 // ---------------------------------------
 // ** IMPORT MODELS **
@@ -21,25 +22,27 @@ exports.register_get = (req, res, next) => {
 };
 
 exports.register_post = (req, res, next) => {
-  const user = new User({
-    first_name: req.body.firstname,
-    last_name: req.body.lastname,
-    username: req.body.username,
-    password: req.body.password,
-  });
-  User.findOne({ username: user.username }, (err, foundUser) => {
+  User.findOne({ username: req.body.username }, (err, foundUser) => {
     if (err) {
       return next(err);
     }
     if (foundUser) {
       res.redirect('/register');
     } else {
-      user.save((err, user) => {
-        if (err) return next(err);
-        if (user) {
-          console.log(user);
-          res.redirect('/');
-        }
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        const user = new User({
+          first_name: req.body.firstname,
+          last_name: req.body.lastname,
+          username: req.body.username,
+          password: hashedPassword,
+        });
+        user.save((err, user) => {
+          if (err) return next(err);
+          if (user) {
+            console.log(user);
+            res.redirect('/');
+          }
+        });
       });
     }
   });
