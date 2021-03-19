@@ -3,7 +3,6 @@
 // ---------------------------------------
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 
 // ---------------------------------------
 // ** IMPORT CONTROLLER MODULE **
@@ -21,15 +20,13 @@ router.post('/register', general.register_post);
 
 router.get('/login', general.login_get);
 
-router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/error',
-  })
-);
+router.post('/login', general.login_post);
+
+router.get('/logout', general.logout_get);
 
 router.get('/error', general.error_get);
+
+router.get('/test', general.test);
 
 // ---------------------------------------
 // ** EXPORT ROUTER **

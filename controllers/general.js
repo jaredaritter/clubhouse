@@ -1,4 +1,9 @@
 // ---------------------------------------
+// ** IMPORT MODULES **
+// ---------------------------------------
+const passport = require('passport');
+
+// ---------------------------------------
 // ** IMPORT MODELS **
 // ---------------------------------------
 const User = require('../models/User');
@@ -8,7 +13,7 @@ const Message = require('../models/Message');
 // ** SELF EXPORTING CONTROLLERS **
 // ---------------------------------------
 exports.index = (req, res, next) => {
-  res.render('index');
+  res.render('index', { user: req.user });
 };
 
 exports.register_get = (req, res, next) => {
@@ -44,10 +49,30 @@ exports.login_get = (req, res, next) => {
   res.render('login');
 };
 
-exports.login_post = (req, res, next) => {
-  res.send('<h1>Logged In</h1>');
+exports.login_post = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/error',
+});
+
+exports.logout_get = (req, res, next) => {
+  req.logout();
+  res.redirect('/');
 };
 
 exports.error_get = (req, res, next) => {
   res.render('error');
 };
+
+exports.test = [
+  (req, res, next) => {
+    req.foo = 'bar';
+    next();
+  },
+  (req, res, next) => {
+    req.bar = 'baz';
+    next();
+  },
+  (req, res, next) => {
+    res.render('test', { foo: req.foo, bar: req.bar });
+  },
+];
