@@ -6,5 +6,8 @@ Use: Register a user name and password. After registering you will be able to si
 
 ## To Do
 
-- [x] Implemented basick error handling in case username already present in the database.
-- [ ] Implement bcryptjs functionality to handle passwords securely.
+- [x] Implemented basic error handling in case username already present in the database.
+- [x] Implement bcryptjs functionality to handle passwords securely.
+- [ ] Give user error message if attempting to register with username that is already in use.
+- [x] Add express-validator for validation and sanitization
+- [ ] Add `confirmPassword` field to sign-up
