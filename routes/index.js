@@ -24,6 +24,8 @@ router.post('/login', general.login_post);
 
 router.get('/join', general.join_get);
 
+router.post('/join', general.join_post);
+
 router.get('/logout', general.logout_get);
 
 router.get('/error', general.error_get);

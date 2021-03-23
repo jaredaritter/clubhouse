@@ -9,7 +9,7 @@ const { body, validationResult } = require('express-validator');
 // ** IMPORT MODELS **
 // ---------------------------------------
 const User = require('../models/User');
-const Message = require('../models/Message');
+const Secret = require('../models/Secret');
 
 // ---------------------------------------
 // ** SELF EXPORTING CONTROLLERS **
@@ -86,13 +86,39 @@ exports.login_post = passport.authenticate('local', {
 // ------------------------------------
 // ** JOIN **
 // ------------------------------------
-exports.join_get = [
-  passport.authenticate('local'),
+exports.join_get = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.render('join', { errors: false });
+  } else {
+    res.redirect('/login');
+  }
+};
+
+exports.join_post = [
   (req, res, next) => {
-    res.render('join');
+    if (req.isAuthenticated()) {
+      next();
+    } else {
+      res.redirect('/login');
+    }
+  },
+  body('passphrase', 'Please enter a passphrase')
+    .not()
+    .isEmpty()
+    .trim()
+    .escape(),
+  (req, res, next) => {
+    // const errors = validationResult(req);
+    Secret.find().exec((err, secrets) => {
+      if (err) return next(err);
+      if (secrets[0].passphrase !== req.body.passphrase) {
+        res.send('<h1>That is not the correct passphrase</h1>');
+      } else {
+        res.send('<h1>Welcome to the club</h1>');
+      }
+    });
   },
 ];
-
 // ------------------------------------
 // ** LOGOUT **
 // ------------------------------------
