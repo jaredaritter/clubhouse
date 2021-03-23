@@ -3,6 +3,7 @@
 // ---------------------------------------
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const { body, validationResult } = require('express-validator');
 
 // ---------------------------------------
 // ** IMPORT MODELS **
@@ -18,35 +19,45 @@ exports.index = (req, res, next) => {
 };
 
 exports.register_get = (req, res, next) => {
-  res.render('register');
+  res.render('register', { errors: false });
 };
 
-exports.register_post = (req, res, next) => {
-  User.findOne({ username: req.body.username }, (err, foundUser) => {
-    if (err) {
-      return next(err);
+exports.register_post = [
+  body('firstname').not().isEmpty().trim().escape(),
+  body('lastname').not().isEmpty().trim().escape(),
+  body('username').not().isEmpty().trim().escape(),
+  body('password').not().isEmpty().trim().escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render('register', { errors: errors.array() });
     }
-    if (foundUser) {
-      res.redirect('/register');
-    } else {
-      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-        const user = new User({
-          first_name: req.body.firstname,
-          last_name: req.body.lastname,
-          username: req.body.username,
-          password: hashedPassword,
+    User.findOne({ username: req.body.username }, (err, foundUser) => {
+      if (err) {
+        return next(err);
+      }
+      if (foundUser) {
+        res.redirect('/register');
+      } else {
+        bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+          const user = new User({
+            first_name: req.body.firstname,
+            last_name: req.body.lastname,
+            username: req.body.username,
+            password: hashedPassword,
+          });
+          user.save((err, user) => {
+            if (err) return next(err);
+            if (user) {
+              console.log(user);
+              res.redirect('/');
+            }
+          });
         });
-        user.save((err, user) => {
-          if (err) return next(err);
-          if (user) {
-            console.log(user);
-            res.redirect('/');
-          }
-        });
-      });
-    }
-  });
-};
+      }
+    });
+  },
+];
 
 exports.login_get = (req, res, next) => {
   res.render('login');
