@@ -23,10 +23,16 @@ exports.register_get = (req, res, next) => {
 };
 
 exports.register_post = [
-  body('firstname').not().isEmpty().trim().escape(),
-  body('lastname').not().isEmpty().trim().escape(),
-  body('username').not().isEmpty().trim().escape(),
-  body('password').not().isEmpty().trim().escape(),
+  body('firstname', 'First name is required.').not().isEmpty().trim().escape(),
+  body('lastname', 'Last name is required.').not().isEmpty().trim().escape(),
+  body('username', 'User name is required').not().isEmpty().trim().escape(),
+  body('password', 'Password is required').not().isEmpty().trim().escape(),
+  body('confirmPassword').custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error('Password confirmation does not match password.');
+    }
+    return true;
+  }),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
