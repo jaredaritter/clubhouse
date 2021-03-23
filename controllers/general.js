@@ -14,10 +14,16 @@ const Message = require('../models/Message');
 // ---------------------------------------
 // ** SELF EXPORTING CONTROLLERS **
 // ---------------------------------------
+// ------------------------------------
+// ** INDEX **
+// ------------------------------------
 exports.index = (req, res, next) => {
   res.render('index', { user: req.user });
 };
 
+// ------------------------------------
+// ** REGISTER **
+// ------------------------------------
 exports.register_get = (req, res, next) => {
   res.render('register', { errors: false });
 };
@@ -65,6 +71,9 @@ exports.register_post = [
   },
 ];
 
+// ------------------------------------
+// ** LOGIN **
+// ------------------------------------
 exports.login_get = (req, res, next) => {
   res.render('login');
 };
@@ -74,15 +83,34 @@ exports.login_post = passport.authenticate('local', {
   failureRedirect: '/error',
 });
 
+// ------------------------------------
+// ** JOIN **
+// ------------------------------------
+exports.join_get = [
+  passport.authenticate('local'),
+  (req, res, next) => {
+    res.render('join');
+  },
+];
+
+// ------------------------------------
+// ** LOGOUT **
+// ------------------------------------
 exports.logout_get = (req, res, next) => {
   req.logout();
   res.redirect('/');
 };
 
+// ------------------------------------
+// ** ERROR **
+// ------------------------------------
 exports.error_get = (req, res, next) => {
   res.render('error');
 };
 
+// ------------------------------------
+// ** EXTRAS **
+// ------------------------------------
 exports.test = [
   (req, res, next) => {
     req.foo = 'bar';

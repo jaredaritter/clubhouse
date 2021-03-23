@@ -22,6 +22,8 @@ router.get('/login', general.login_get);
 
 router.post('/login', general.login_post);
 
+router.get('/join', general.join_get);
+
 router.get('/logout', general.logout_get);
 
 router.get('/error', general.error_get);

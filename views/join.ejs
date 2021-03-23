@@ -10,22 +10,26 @@
       integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
       crossorigin="anonymous"
     />
-    <title>Home</title>
+    <title>Join the Club</title>
   </head>
   <body class="container">
     <div class="d-flex justify-content-center">
       <div class="vh-100 d-flex flex-column justify-content-center">
         <div class="d-flex flex-column">
-          <% if (user) { %>
-          <h1>Welcome Back <%= user.username %>!</h1>
-          <a href="/logout">Logout</a>
-          <a href="/register">Register</a>
-          <a href="/join">Join the Club</a>
-          <% } else { %>
-          <h1>Welcome!</h1>
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-          <% } %>
+          <h1>Join the club</h1>
+          <h2>To become a member, please enter the secret password</h2>
+          <form action="" method="POST">
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
       </div>
     </div>
