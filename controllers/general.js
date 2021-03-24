@@ -10,6 +10,7 @@ const { body, validationResult } = require('express-validator');
 // ---------------------------------------
 const User = require('../models/User');
 const Secret = require('../models/Secret');
+const { resolveInclude } = require('ejs');
 
 // ---------------------------------------
 // ** SELF EXPORTING CONTROLLERS **
@@ -108,15 +109,20 @@ exports.join_post = [
     .trim()
     .escape(),
   (req, res, next) => {
-    // const errors = validationResult(req);
-    Secret.find().exec((err, secrets) => {
-      if (err) return next(err);
-      if (secrets[0].passphrase !== req.body.passphrase) {
-        res.send('<h1>That is not the correct passphrase</h1>');
-      } else {
-        res.send('<h1>Welcome to the club</h1>');
-      }
-    });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render('join', { errors: errors.array() });
+    } else {
+      Secret.find().exec((err, secrets) => {
+        if (err) return next(err);
+        if (secrets[0].passphrase !== req.body.passphrase) {
+          res.render('join', { errors: false });
+          // res.send('<h1>That is not the correct passphrase</h1>');
+        } else {
+          res.send('<h1>Welcome to the club</h1>');
+        }
+      });
+    }
   },
 ];
 // ------------------------------------

@@ -29,6 +29,15 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
+          <div class="mt-3">
+            <% if (errors) { %>
+            <ul>
+              <% for (const error of errors) { %>
+              <li><%= error.msg %></li>
+              <% } %>
+            </ul>
+            <% } %>
+          </div>
         </div>
       </div>
     </div>
