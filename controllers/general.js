@@ -43,6 +43,7 @@ exports.register_post = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).render('register', { errors: errors.array() });
     }
     User.findOne({ username: req.body.username }, (err, foundUser) => {
@@ -50,7 +51,8 @@ exports.register_post = [
         return next(err);
       }
       if (foundUser) {
-        res.redirect('/register');
+        const error = [{ msg: 'User name already in use' }];
+        return res.status(400).render('register', { errors: error });
       } else {
         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
           const user = new User({
