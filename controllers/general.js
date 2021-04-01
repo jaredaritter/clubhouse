@@ -105,23 +105,28 @@ exports.join_post = [
       res.redirect('/login');
     }
   },
-  body('passphrase', 'Please enter a passphrase')
-    .not()
-    .isEmpty()
-    .trim()
-    .escape(),
+  body('passphrase', 'Please enter a passphrase').not().isEmpty().escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.render('join', { errors: errors.array() });
     } else {
-      Secret.find().exec((err, secrets) => {
+      Secret.findOne({ name: 'passphrase' }, function (err, secret) {
         if (err) return next(err);
-        if (secrets[0].passphrase !== req.body.passphrase) {
-          res.render('join', { errors: false });
-          // res.send('<h1>That is not the correct passphrase</h1>');
+        if (secret.passphrase !== req.body.passphrase) {
+          const error = [{ msg: 'Sorry, that is not the correct passphrase' }];
+          res.render('join', { errors: error });
         } else {
-          res.send('<h1>Welcome to the club</h1>');
+          // console.log(req);
+          User.findByIdAndUpdate(
+            req.user._id,
+            { member: true },
+            (err, user) => {
+              if (err) return next(err);
+              console.log(user.member);
+              res.send('<h1>Welcome to the club</h1>');
+            }
+          );
         }
       });
     }
