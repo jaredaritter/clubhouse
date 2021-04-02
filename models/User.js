@@ -9,7 +9,6 @@ const UserSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   member: { type: Boolean, default: false, required: true },
-  messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
 });
 
 UserSchema.virtual('fullName').get(function () {
