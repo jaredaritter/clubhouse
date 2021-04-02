@@ -19,7 +19,15 @@ const Secret = require('../models/Secret');
 // ** INDEX **
 // ------------------------------------
 exports.index = (req, res, next) => {
-  res.render('index', { user: req.user });
+  Message.find({})
+    .populate('author')
+    .exec((err, messages) => {
+      if (err) {
+        return next(err);
+      } else {
+        res.render('index', { user: req.user, messages: messages });
+      }
+    });
 };
 
 // ------------------------------------
@@ -146,21 +154,30 @@ exports.message_get = (req, res, next) => {
 };
 
 exports.message_post = [
+  (req, res, next) => {
+    if (req.isAuthenticated()) {
+      next();
+    } else {
+      res.redirect('/login');
+    }
+  },
   // VALIDATE
   body('title', 'Title can not be empty.').not().isEmpty().trim().escape(),
-  body('message', 'Message can not be empty.').not().isEmpty().trim().escape(),
+  body('text', 'Text can not be empty.').not().isEmpty().trim().escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.render('message', { errors: errors.array() });
+      return res.status(400).render('message', { errors: errors.array() });
     }
     const message = new Message({
       title: req.body.title,
-      message: req.body.message,
+      text: req.body.text,
+      author: req.user._id,
     }).save((err, message) => {
       if (err) return next(err);
-      console.log(message);
-      res.render('message', { errors: false });
+      if (message) {
+        res.render('message', { errors: false });
+      }
     });
   },
 ];
