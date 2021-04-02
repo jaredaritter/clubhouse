@@ -121,10 +121,11 @@ exports.join_post = [
           User.findByIdAndUpdate(
             req.user._id,
             { member: true },
+            { new: true },
             (err, user) => {
               if (err) return next(err);
               console.log(user.member);
-              res.send('<h1>Welcome to the club</h1>');
+              res.render('member', { user: user });
             }
           );
         }
