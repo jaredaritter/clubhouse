@@ -27,6 +27,7 @@ const mongoDB = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSW
 mongoose.connect(mongoDB, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  useFindAndModify: false,
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Mongo connection error'));
