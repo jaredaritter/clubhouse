@@ -64,7 +64,7 @@ exports.register_post = [
           user.save((err, user) => {
             if (err) return next(err);
             if (user) {
-              console.log(user);
+              console.log('Saved user: ' + user.username);
               res.redirect('/');
             }
           });
