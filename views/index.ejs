@@ -1,3 +1,4 @@
+<!-- IMPORTING USER, MESSAGES -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -25,6 +26,17 @@
           <h1>Welcome!</h1>
           <a href="/login">Login</a>
           <a href="/register">Register</a>
+          <% } %> <% if (messages) { %>
+          <ul>
+            <% messages.forEach(message => { %>
+            <li>
+              <div class="mt-3">
+                <%= message.text %> <% if (user && user.member) { %> <%=
+                message.author.username %> <%= message.date %> <% } %>
+              </div>
+            </li>
+            <% }) %>
+          </ul>
           <% } %>
         </div>
       </div>
