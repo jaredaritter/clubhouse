@@ -14,10 +14,10 @@ Use: Register a user name and password. After registering you will be able to si
 - [x] Get join page working
 - [x] Get message page working
 - [] Decide the best way to hold message data. Currently leaning towards storing User object in Message instead of the other way around
-- [] Display all member messages on the home page, but only show the author and date of the messages to other club-members
+- [ ] Display all member messages on the home page, but only show the author and date of the messages to other club-members
 
 ### Non-essential To Do
 
-- [] Return submitted values when error on posting form data
-- [] Separate authenticated and non-authenticated routes. Check early on whether request is authenticated so that the check is not required in each private controller.
-- [] Notify user if they are already a member when reaching join page.
+- [ ] Return submitted values when error on posting form data
+- [ ] Separate authenticated and non-authenticated routes. Check early on whether request is authenticated so that the check is not required in each private controller.
+- [ ] Notify user if they are already a member when reaching join page.
