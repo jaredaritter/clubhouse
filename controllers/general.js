@@ -9,8 +9,8 @@ const { body, validationResult } = require('express-validator');
 // ** IMPORT MODELS **
 // ---------------------------------------
 const User = require('../models/User');
+const Message = require('../models/Message');
 const Secret = require('../models/Secret');
-const { resolveInclude } = require('ejs');
 
 // ---------------------------------------
 // ** SELF EXPORTING CONTROLLERS **
@@ -133,6 +133,38 @@ exports.join_post = [
     }
   },
 ];
+
+// ------------------------------------
+// ** MESSAGE **
+// ------------------------------------
+exports.message_get = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.render('message', { errors: false });
+  } else {
+    res.redirect('/login');
+  }
+};
+
+exports.message_post = [
+  // VALIDATE
+  body('title', 'Title can not be empty.').not().isEmpty().trim().escape(),
+  body('message', 'Message can not be empty.').not().isEmpty().trim().escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render('message', { errors: errors.array() });
+    }
+    const message = new Message({
+      title: req.body.title,
+      message: req.body.message,
+    }).save((err, message) => {
+      if (err) return next(err);
+      console.log(message);
+      res.render('message', { errors: false });
+    });
+  },
+];
+
 // ------------------------------------
 // ** LOGOUT **
 // ------------------------------------
