@@ -137,7 +137,7 @@ exports.join_post = [
             { new: true },
             (err, user) => {
               if (err) return next(err);
-              console.log(user.member);
+              console.log('member?: ' + user.member);
               res.render('member', { user: user });
             }
           );
