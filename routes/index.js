@@ -36,6 +36,8 @@ router.get('/error', general.error_get);
 
 router.get('/test', general.test);
 
+// router.get('/addSecret', general.addSecret);
+
 // ---------------------------------------
 // ** EXPORT ROUTER **
 // ---------------------------------------

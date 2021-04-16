@@ -114,6 +114,7 @@ exports.join_post = [
     }
   },
   body('passphrase', 'Please enter a passphrase').not().isEmpty().escape(),
+  body('admin', 'Something is wrong with your admin entry').escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -121,6 +122,10 @@ exports.join_post = [
     } else {
       Secret.findOne({ name: 'passphrase' }, function (err, secret) {
         if (err) return next(err);
+        let isAdmin = false;
+        if (secret.admin === req.body.admin) {
+          isAdmin = true;
+        }
         if (secret.passphrase !== req.body.passphrase) {
           const error = [{ msg: 'Sorry, that is not the correct passphrase' }];
           res.render('join', { errors: error });
@@ -128,7 +133,7 @@ exports.join_post = [
           // console.log(req);
           User.findByIdAndUpdate(
             req.user._id,
-            { member: true },
+            { member: true, admin: isAdmin },
             { new: true },
             (err, user) => {
               if (err) return next(err);
@@ -213,3 +218,14 @@ exports.test = [
     res.render('test', { foo: req.foo, bar: req.bar });
   },
 ];
+
+exports.addSecret = (req, res, next) => {
+  const secret = new Secret({
+    name: 'passphrase',
+    passphrase: 'opensesame',
+    admin: 'bossypants',
+  }).save((err, secret) => {
+    if (err) return next(err);
+    res.send('<h1>Secret saved</h1>');
+  });
+};
